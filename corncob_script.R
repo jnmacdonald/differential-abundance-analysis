@@ -38,3 +38,11 @@ da <- diff_test(asv, meta, sample_var, 1)
 setwd("/home/jocelyn/results/corncob")
 write.table(da, "da_Exercise_corncob.txt", quote = FALSE, col.names = FALSE, row.names = FALSE)
 
+setwd("/home/shared/hackathon/tables_and_metadata/BISCUIT")
+asv <- "BISCUIT_ASVs_filt_subset.tsv"
+meta <- "BISCUIT_metadata.txt"
+sample_var <- "disease_state"
+da <- diff_test(asv, meta, sample_var, 1)
+setwd("/home/jocelyn/results/corncob")
+write.table(da, "BISCUIT_corncob.txt", quote = FALSE, col.names = FALSE, row.names = FALSE)
+
