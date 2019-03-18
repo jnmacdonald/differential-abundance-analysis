@@ -1,0 +1,86 @@
+transform_wilcox <- function(ASV, meta, i=F, c=F, a=F, col_of_meta=1) {
+  asv <- read.table(ASV, sep="\t", header=T, check.names=F)
+  metadata <- read.table(meta, sep="\t", row.names = 1, header=T, comment.char="", check.names = F, stringsAsFactors = F, quote="")
+  
+  #take the overlapping sample ids in the metadata and asv tables
+  colnames(metadata)[col_of_meta] <- "grouping"
+  overlapping_ids <- colnames(asv)[which(colnames(asv) %in% rownames(metadata))]
+  ASV_ordered <- asv[, overlapping_ids]
+  meta_ordered <- metadata[overlapping_ids,, drop=FALSE]
+  ASV_ordered <- cbind(asv[,1], ASV_ordered[,])
+  colnames(ASV_ordered)[1] <- "asv"
+  rnames <- as.character(ASV_ordered[,1])
+  cnames <- colnames(ASV_ordered)
+  ASV_ordered <- data.frame(t(ASV_ordered))
+  colnames(ASV_ordered) <- rnames
+  ASV_ordered <- ASV_ordered[-1,]
+  cnames <- cnames[-1]
+  ASV_ordered <- cbind(cnames, ASV_ordered)
+  rownames(ASV_ordered) <- NULL
+  
+
+  #performs the ilr transformation 
+  if(i) {
+    matrix.ilr <- ilr(ASV_ordered, V=ilrBase(ASV_ordered))
+    matrix.ilr <- data.frame(matrix.ilr)
+    rownames(matrix.ilr) <- cnames
+    colnames(matrix.ilr) <- rnames
+    ri <- wilcox(matrix.ilr, meta_ordered)
+    write(ri,file="ilr_trans_wilcox.txt")
+  }
+  
+  #performs the clr transformation
+  if(c) {
+      matrix.clr <- clr(ASV_ordered[,2:ncol(ASV_ordered)])
+      matrix.clr <- data.frame(matrix.clr)
+      rownames(matrix.clr) <- cnames
+      colnames(matrix.clr) <- rnames
+      c <- data.frame(matrix.clr)
+      rc <- wilcox(c, meta_ordered)
+      write(rc,file="clr_trans_wilcox.txt")
+  }
+  
+  #performs the alr transformation
+  if(a) {
+    asv_fix <- ASV_ordered[,2:ncol(ASV_ordered)]
+    asv_fix <- cbind(ASV_ordered[,1], asv_fix)
+    matrix.alr <- alr(asv_fix)
+    matrix.alr <- data.frame(matrix.alr)
+    rownames(matrix.alr) <- ASV_ordered[,1]
+    cnames <- colnames(ASV_ordered)[2:ncol(ASV_ordered)]
+    colnames(matrix.alr) <- cnames
+    a <- data.frame(matrix.alr)
+    ra <- wilcox(a, meta_ordered)
+    
+    write(ra,file="alr_trans_wilcox.txt")
+  }
+  
+  #if none the the transformations were true in the input, the wilcoxon test will be run without doing any transformations
+  if((!i)&&(!c)&&(!a)) {
+    w <- ASV_ordered[,2:ncol(ASV_ordered)]
+    rownames(w) <- ASV_ordered[,1]
+    cnames <- colnames(ASV_ordered)[2:ncol(ASV_ordered)]
+    colnames(w) <- cnames
+    
+    w <- data.frame(t(w))
+    rows <- wilcox(w, meta_ordered)
+    write(rows,file="wilcox.txt")
+  }
+}
+
+#does the wilcoxon test
+matrix <- c
+wilcox <- function(matrix, meta_ordered) {
+  pvals <- apply(matrix, 2, function(x) wilcox.test(x ~ meta_ordered$grouping, exact=F)$p.value)
+  qvals <- p.adjust(pvals, "fdr")
+  qvals <- data.frame(qvals)
+  
+  len <- length(which(qvals[ , "qvals"] < 0.05))
+  rows <- which(qvals[ , "qvals"] < 0.05)
+  output <- ""
+  for(i in 1:len) {
+    output[i] <- rownames(qvals)[i]
+  }
+  return(output)
+}
+
