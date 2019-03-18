@@ -1,0 +1,66 @@
+source('~/final_scripts/wilcox_function.R')
+
+#Chemerin
+setwd("/home/jocelyn/results/wilcoxon/Chemerin")
+transform_wilcox("/home/shared/hackathon/tables_and_metadata/Chemerin/Chemerin_ASVs_filt_subset.tsv", 
+                 "/home/shared/hackathon/tables_and_metadata/Chemerin/Chemerin_metadata.txt", 
+                 i=T, c=T, a=T)
+
+#Blueberry
+setwd("/home/jocelyn/results/wilcoxon/Blueberry")
+transform_wilcox("/home/shared/hackathon/tables_and_metadata/Blueberry/Blueberry_ASVs_filt_subset.tsv", 
+                 "/home/shared/hackathon/tables_and_metadata/Blueberry/map_hackathon_blueberry.txt", 
+                 i=T, c=T, a=T)
+
+#Blueberry filt
+setwd("/home/jocelyn/results/wilcoxon/Blueberry_Filt")
+transform_wilcox("/home/jocelyn/results/wilcoxon/Blueberry_Filt/Blueberry_ASVs_filt_subset_noLowVar.biom.tsv", 
+                 "/home/shared/hackathon/tables_and_metadata/Blueberry/map_hackathon_blueberry.txt", 
+                 i=T, c=T, a=T)
+
+#MALL
+setwd("/home/jocelyn/results/wilcoxon/MALL")
+transform_wilcox("/home/shared/hackathon/tables_and_metadata/MALL/MALL_ASVs_filt_subset.tsv", 
+                 "/home/shared/hackathon/tables_and_metadata/MALL/MALL_simple_metadata.txt", 
+                 i=T, c=T, a=T)
+
+#BISCUIT
+setwd("/home/jocelyn/results/wilcoxon/BISCUIT")
+transform_wilcox("/home/jocelyn/results/BISCUIT_ASVs_filt_subset.biom.tsv", 
+                 "/home/jocelyn/results/ALDEx2/B_metadata.txt",
+                 i=T, c=T, a=T, col_of_meta=2)
+#Exercise
+setwd("/home/jocelyn/results/wilcoxon/Exercise")
+transform_wilcox("/home/shared/hackathon/tables_and_metadata/Exercise/Exercise_ASVs_filt_subset.tsv", 
+                 "/home/shared/hackathon/tables_and_metadata/Exercise/forced_exercise_metadata.txt",
+                 i=T, c=T, a=T)
+
+#Chemerin rarified
+setwd("/home/jocelyn/results/wilcoxon/rarefied/Chemerin")
+transform_wilcox("/home/jocelyn/results/wilcoxon/rarefied/Chemerin_ASVs_filt_rare.biom.tsv", 
+                 "/home/shared/hackathon/tables_and_metadata/Chemerin/Chemerin_metadata.txt")
+
+#Blueberry rarefied
+setwd("/home/jocelyn/results/wilcoxon/rarefied/Blueberry")
+transform_wilcox("/home/shared/hackathon/tables_and_metadata/Blueberry/Blueberry_ASVs_filt_subset_rare.tsv",
+                 "/home/shared/hackathon/tables_and_metadata/Blueberry/map_hackathon_blueberry.txt")
+#Blueberry filt rarefied
+setwd("/home/jocelyn/results/wilcoxon/rarefied/BlueberryFilt")
+transform_wilcox("/home/shared/hackathon/tables_and_metadata/Blueberry/Blueberry_ASVs_filt_subset_rare_noLowVar.tsv",
+                 "/home/shared/hackathon/tables_and_metadata/Blueberry/map_hackathon_blueberry.txt")
+
+#BISCUIT rarefied
+setwd("/home/jocelyn/results/wilcoxon/rarefied/BISCUIT")
+transform_wilcox("/home/jocelyn/results/wilcoxon/rarefied/BISCUIT_ASVs_filt_subset_rare.biom.tsv", 
+                 "/home/jocelyn/results/ALDEx2/B_metadata.txt",
+                 col_of_meta=2)
+
+#MALL rarefied
+setwd("/home/jocelyn/results/wilcoxon/rarefied/MALL")
+transform_wilcox("/home/jocelyn/results/wilcoxon/rarefied/MALL_ASVs_filt_subset_rare.biom.tsv", 
+                 "/home/shared/hackathon/tables_and_metadata/MALL/MALL_simple_metadata.txt")
+
+#Exercise rarefied
+setwd("/home/jocelyn/results/wilcoxon/rarefied/Exercise")
+transform_wilcox("/home/jocelyn/results/wilcoxon/rarefied/Exercise_ASVs_filt_subset_rare.biom.tsv", 
+                 "/home/shared/hackathon/tables_and_metadata/Exercise/forced_exercise_metadata.txt")
